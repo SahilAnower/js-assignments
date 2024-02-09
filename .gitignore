@@ -1,0 +1,4 @@
+online-quiz/backend/.env
+online-quiz/frontend/.env
+online-quiz/frontend/node_modules
+online-quiz/backend/node_modules
