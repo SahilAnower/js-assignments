@@ -23,7 +23,7 @@ export const createResultService = async (payload) => {
     }
     const savedResult = await createResult({
       user: userId,
-      score: `${count}/5`,
+      score: count,
     });
     return savedResult;
   } catch (error) {

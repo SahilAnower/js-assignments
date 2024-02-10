@@ -21,9 +21,6 @@ export const getRandomQuestions = async () => {
       },
       {
         $project: {
-          _id: 1,
-          statement: 1,
-          answers: 1,
           correctAnswer: 0,
           createdAt: 0,
           updatedAt: 0,

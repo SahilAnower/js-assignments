@@ -15,6 +15,11 @@ export const getAllResults = async (searchPayload = null) => {
   try {
     const res = await ResultModel.aggregate([
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $lookup: {
           from: "users",
           localField: "user",
