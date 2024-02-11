@@ -5,6 +5,7 @@ export const userCreate = async (req, res, next) => {
     const response = await createUserService(req.body);
     return res.status(200).json(response);
   } catch (error) {
+    // console.log(error);
     next(error);
   }
 };

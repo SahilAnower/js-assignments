@@ -11,6 +11,10 @@ import { Box } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { createUserAPI } from "../api/user";
+import { useQuizStore } from "../store/store";
+import { showErrorToast, showSuccessToast } from "../toast/toastMessage";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -31,12 +35,46 @@ function Copyright(props) {
 }
 
 export default function HomePage() {
-  const handleSubmit = (event) => {
+  const setUserStore = useQuizStore((state) => state.setUser);
+  const userStore = useQuizStore((state) => state.user);
+  const navigate = useNavigate();
+
+  const [user, setUser] = React.useState({
+    email: "",
+    username: "",
+  });
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    // console.log(user);
+    // call api
+    try {
+      const response = await createUserAPI(user);
+      console.log(response);
+      setUserStore({
+        ...userStore,
+        email: response?.email,
+        username: response?.username,
+        userId: response?._id,
+      });
+      showSuccessToast("Credentials saved successfully for exam!");
+      setTimeout(() => {
+        navigate("/exam");
+      }, 2000);
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message);
+    }
+    // store email, username, userId in store
+    setUser({
+      email: "",
+      username: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -67,6 +105,8 @@ export default function HomePage() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={user?.email}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
@@ -77,6 +117,8 @@ export default function HomePage() {
             type="text"
             id="username"
             autoComplete="username"
+            value={user?.username}
+            onChange={handleChange}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

@@ -4,11 +4,11 @@ import { createJSONStorage, persist } from "zustand/middleware";
 export const useQuizStore = create(
   persist(
     (set) => ({
-      seconds: 10,
-      userId: null,
+      seconds: 5 * 60,
+      user: {},
       ownResultId: null,
       setSeconds: (seconds) => set({ seconds }),
-      setUserId: (userId) => set({ userId }),
+      setUser: (user) => set({ user }),
       setOwnResultId: (ownResultId) => set({ ownResultId }),
     }),
     {

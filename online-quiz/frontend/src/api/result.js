@@ -1,7 +1,7 @@
 import { VITE_API_URL } from "../globals";
 import axios from "axios";
 
-export const createResult = async (payload) => {
+export const createResultAPI = async (payload) => {
   try {
     const response = await axios.post(VITE_API_URL + "/api/results");
     return response.data;
@@ -10,7 +10,7 @@ export const createResult = async (payload) => {
   }
 };
 
-export const getAllResults = async () => {
+export const getAllResultsAPI = async () => {
   try {
     const response = await axios.get(VITE_API_URL + "/api/results");
     return response.data;
