@@ -19,11 +19,9 @@ body {
     text-align: center;
     padding: 20px;
     background-color: rgba(71, 79, 122, 0.7);
-    /* Set the background color to be transparent */
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    /* Adjust the alpha value here for the box shadow transparency */
-    margin-top: 105px;
+    margin-top: 10px;
     color: #fff;
 }
 
@@ -131,8 +129,42 @@ input[type="text"] {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    padding: 0.5rem;
+    background-color: #1F2544;
+    color: #FFD0EC;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: ease-in-out;
 }
 
 .extra-property > p {
     margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.forecast-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.forecast-container > div:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.forecast-container>div:nth-child(2) div {
+    padding: 0.2rem;
+    background-color: #1F2544;
+    color: #FFD0EC;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: ease-in-out;
 }

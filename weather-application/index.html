@@ -12,30 +12,37 @@
         <input type="text" id="locationInput" placeholder="Enter a city">
         <button id="searchButton" class="glow-on-hover">🔍 Search</button>
         <div class="weather-info">
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <h2 id="location">Kolkata</h2>
                 <p id="temperature">17°C</p>
                 <p id="description">Haze</p>
             </div>
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <p>Feels like</p>
                 <p id="feels-like-temperature">17°C</p>
             </div>
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <p>Minimum temperature</p>
                 <p id="min-temperature">17°C</p>
             </div>
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <p>Maximum temperature</p>
                 <p id="max-temperature">17°C</p>
             </div>
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <p>Pressure</p>
                 <p id="pressure">1019mb</p>
             </div>
-            <div class="extra-property">
+            <div class="extra-property hidden">
                 <p>Visibility</p>
                 <p id="visibility">3.5km</p>
+            </div>
+        </div>
+        <div class="forecast-container">
+            <div class="forecast-header hidden">
+                <h2>5-day forecast</h2>
+            </div>
+            <div id="forecast-append-container">
             </div>
         </div>
     </div>
