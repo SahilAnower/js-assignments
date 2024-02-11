@@ -5,7 +5,7 @@ import { getQuestionByIdsService } from "./question.services.js";
 export const createResultService = async (payload) => {
   try {
     if (!payload.answers || !payload.userId) {
-      throw new CustomError(400, "Answers array and userId are required!");
+      throw new CustomError("Answers array and userId are required!", 400);
     }
     const answers = payload.answers;
     const userId = payload.userId;
@@ -23,7 +23,7 @@ export const createResultService = async (payload) => {
     }
     const savedResult = await createResult({
       user: userId,
-      score: `${count}/5`,
+      score: count,
     });
     return savedResult;
   } catch (error) {

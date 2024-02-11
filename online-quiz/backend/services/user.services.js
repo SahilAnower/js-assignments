@@ -3,8 +3,14 @@ import { CustomError } from "../models/CustomError.js";
 
 export const createUserService = async (payload) => {
   try {
-    if (!payload.username || !payload.email) {
-      throw new CustomError(400, "Please provide username and email");
+    if (
+      !payload.username ||
+      !payload.email ||
+      payload.email === "" ||
+      payload.username === ""
+    ) {
+      // console.log("here");
+      throw new CustomError("Please provide username and email", 400);
     }
     const createdUser = await createUser(payload);
     return createdUser;

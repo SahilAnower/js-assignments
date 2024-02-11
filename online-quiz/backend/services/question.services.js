@@ -9,8 +9,8 @@ export const createQuestionService = async (payload) => {
   try {
     if (!payload.statement || !payload.answers || !payload.correctAnswer) {
       throw new CustomError(
-        400,
-        "Please provide statement, answers and correctAnswer"
+        "Please provide statement, answers and correctAnswer",
+        400
       );
     }
     const questionCreated = createQuestion(payload);
