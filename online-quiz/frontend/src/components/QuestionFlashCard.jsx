@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+// import { useQuizStore } from "../store/store";
 
 const QuestionFlashCard = ({
   question,
@@ -22,9 +23,11 @@ const QuestionFlashCard = ({
   isStepOptional,
   questionMap,
 }) => {
+  // const questionMap = useQuizStore((state) => state.questionMap);
+
   const getQuestionOptionInitialState = () => {
-    if (questionMap.has(question?._id)) {
-      return questionMap.get(question?._id);
+    if (questionMap.hasOwnProperty(question?._id)) {
+      return questionMap[question?._id];
     } else {
       return "";
     }
@@ -43,7 +46,7 @@ const QuestionFlashCard = ({
   };
 
   const handleQuestionOptionSave = () => {
-    questionMap.set(question?._id, optionSelected);
+    questionMap[question?._id] = optionSelected;
   };
 
   return (

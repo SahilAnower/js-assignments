@@ -9,155 +9,44 @@ import QuestionFlashCard from "../components/QuestionFlashCard";
 import Timer from "../components/Timer";
 import { useNavigate } from "react-router-dom";
 import { useQuizStore } from "../store/store";
+import { showErrorToast } from "../toast/toastMessage";
+import { getQuestionsAPI } from "../api/question";
+import { createResultAPI } from "../api/result";
 
-const questions = [
-  {
-    _id: "65c7be9009a20abf42719ab2",
-    statement:
-      "Upon encountering empty statements, what does the Javascript Interpreter do?",
-    answers: [
-      {
-        option: "a",
-        content: "Throws an error",
-        _id: "65c7be9009a20abf42719ab3",
-      },
-      {
-        option: "b",
-        content: "Ignores the statements",
-        _id: "65c7be9009a20abf42719ab4",
-      },
-      {
-        option: "c",
-        content: "Gives a warning",
-        _id: "65c7be9009a20abf42719ab5",
-      },
-      {
-        option: "d",
-        content: "None of the above",
-        _id: "65c7be9009a20abf42719ab6",
-      },
-    ],
-    __v: 0,
-  },
-  {
-    _id: "65c7bff109a20abf42719ad0",
-    statement: "What is the use of the <noscript> tag in Javascript?",
-    answers: [
-      {
-        option: "a",
-        content: "The contents are displayed by non-JS-based browsers",
-        _id: "65c7bff109a20abf42719ad1",
-      },
-      {
-        option: "b",
-        content: "Clears all the cookies and cache",
-        _id: "65c7bff109a20abf42719ad2",
-      },
-      {
-        option: "c",
-        content: "Both a and b",
-        _id: "65c7bff109a20abf42719ad3",
-      },
-      {
-        option: "d",
-        content: "None of the above",
-        _id: "65c7bff109a20abf42719ad4",
-      },
-    ],
-    __v: 0,
-  },
-  {
-    _id: "65c7c04d09a20abf42719ad6",
-    statement:
-      "When an operator’s value is NULL, the typeof returned by the unary operator is:",
-    answers: [
-      {
-        option: "a",
-        content: "Boolean",
-        _id: "65c7c04d09a20abf42719ad7",
-      },
-      {
-        option: "b",
-        content: "Undefined",
-        _id: "65c7c04d09a20abf42719ad8",
-      },
-      {
-        option: "c",
-        content: "Object",
-        _id: "65c7c04d09a20abf42719ad9",
-      },
-      {
-        option: "d",
-        content: "Integer",
-        _id: "65c7c04d09a20abf42719ada",
-      },
-    ],
-    __v: 0,
-  },
-  {
-    _id: "65c7bf0609a20abf42719abe",
-    statement: "How can a datatype be declared to be a constant type?",
-    answers: [
-      {
-        option: "a",
-        content: "const",
-        _id: "65c7bf0609a20abf42719abf",
-      },
-      {
-        option: "b",
-        content: "var",
-        _id: "65c7bf0609a20abf42719ac0",
-      },
-      {
-        option: "c",
-        content: "let",
-        _id: "65c7bf0609a20abf42719ac1",
-      },
-      {
-        option: "d",
-        content: "constant",
-        _id: "65c7bf0609a20abf42719ac2",
-      },
-    ],
-    __v: 0,
-  },
-  {
-    _id: "65c7bf7e09a20abf42719ac4",
-    statement:
-      "When the switch statement matches the expression with the given labels, how is the comparison done?",
-    answers: [
-      {
-        option: "a",
-        content:
-          "Both the datatype and the result of the expression are compared",
-        _id: "65c7bf7e09a20abf42719ac5",
-      },
-      {
-        option: "b",
-        content: "Only the datatype of the expression is compared",
-        _id: "65c7bf7e09a20abf42719ac6",
-      },
-      {
-        option: "c",
-        content: "Only the value of the expression is compared",
-        _id: "65c7bf7e09a20abf42719ac7",
-      },
-      {
-        option: "d",
-        content: "None of the above",
-        _id: "65c7bf7e09a20abf42719ac8",
-      },
-    ],
-    __v: 0,
-  },
-];
-
-const questionMap = new Map();
-
-// console.log(questions[0]._id);
+// const questionMap = new Map();
 
 export default function ExamPage() {
-  const { seconds, setSeconds } = useQuizStore((state) => state);
+  const {
+    seconds,
+    setSeconds,
+    questions,
+    setQuestions,
+    questionMap,
+    user,
+    setCurrResult,
+    setQuestionMap,
+    setUser,
+  } = useQuizStore((state) => state);
+
+  React.useEffect(() => {
+    // check questions exist in global state, if exist render them only
+    // console.log(questions);
+    if (questions) {
+      console.log("here inside null check");
+      return;
+    }
+    // if not exists, call api to get the questions
+    async function getQuestions() {
+      try {
+        const response = await getQuestionsAPI();
+        setQuestions(response);
+      } catch (error) {
+        showErrorToast(error?.response?.data?.message);
+      }
+    }
+    // set questions in global state
+    getQuestions();
+  }, []);
 
   // questionMap.clear();
 
@@ -194,15 +83,41 @@ export default function ExamPage() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // call results api to post a new result
+    const answers = [];
+    // console.log(questionMap);
+    for (let property in questionMap) {
+      answers.push({
+        id: property,
+        answer: questionMap[property],
+      });
+    }
+    const payload = {
+      userId: user?.userId,
+      answers: answers,
+    };
+    // console.log(payload);
+    try {
+      const response = await createResultAPI(payload);
+      setCurrResult(response);
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message);
+    }
+    setQuestionMap({});
+    setUser({});
+    setSeconds(5 * 60);
+    setQuestions(null);
     navigate("/results");
   };
 
-  if (activeStep === questions.length || seconds === 0) {
-    setTimeout(() => {
-      handleSubmit();
-    }, 500);
-  }
+  React.useEffect(() => {
+    if (questions && (activeStep === questions.length || seconds === 0)) {
+      setTimeout(async () => {
+        await handleSubmit();
+      }, 500);
+    }
+  }, [activeStep, seconds]);
 
   const handleSkip = () => {
     // if (!isStepOptional(activeStep)) {
@@ -230,75 +145,79 @@ export default function ExamPage() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box>
-        {/* <TimerComponent /> */}
-        <Timer seconds={seconds} setSeconds={setSeconds} />
-      </Box>
-      <Stepper activeStep={activeStep}>
-        {questions.map((question, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={index} {...stepProps}>
-              <StepLabel {...labelProps}>{question?.statement}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === questions.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
+      {questions && (
+        <>
+          <Box>
+            {/* <TimerComponent /> */}
+            <Timer seconds={seconds} setSeconds={setSeconds} />
           </Box>
-        </React.Fragment>
-      ) : (
-        // <React.Fragment>
-        //   <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-        //   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        //     <Button
-        //       color="inherit"
-        //       disabled={activeStep === 0}
-        //       onClick={handleBack}
-        //       sx={{ mr: 1 }}
-        //     >
-        //       Back
-        //     </Button>
-        //     <Box sx={{ flex: "1 1 auto" }} />
-        //     {isStepOptional(activeStep) && (
-        //       <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-        //         Skip
-        //       </Button>
-        //     )}
+          <Stepper activeStep={activeStep}>
+            {questions.map((question, index) => {
+              const stepProps = {};
+              const labelProps = {};
+              if (isStepOptional(index)) {
+                labelProps.optional = (
+                  <Typography variant="caption">Optional</Typography>
+                );
+              }
+              if (isStepSkipped(index)) {
+                stepProps.completed = false;
+              }
+              return (
+                <Step key={index} {...stepProps}>
+                  <StepLabel {...labelProps}>{question?.statement}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          {activeStep === questions.length ? (
+            <React.Fragment>
+              <Typography sx={{ mt: 2, mb: 1 }}>
+                All steps completed - you&apos;re finished
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                <Box sx={{ flex: "1 1 auto" }} />
+                <Button onClick={handleReset}>Reset</Button>
+              </Box>
+            </React.Fragment>
+          ) : (
+            // <React.Fragment>
+            //   <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+            //   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            //     <Button
+            //       color="inherit"
+            //       disabled={activeStep === 0}
+            //       onClick={handleBack}
+            //       sx={{ mr: 1 }}
+            //     >
+            //       Back
+            //     </Button>
+            //     <Box sx={{ flex: "1 1 auto" }} />
+            //     {isStepOptional(activeStep) && (
+            //       <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+            //         Skip
+            //       </Button>
+            //     )}
 
-        //     <Button onClick={handleNext}>
-        //       {activeStep === questions.length - 1 ? "Finish" : "Next"}
-        //     </Button>
-        //   </Box>
-        // </React.Fragment>
+            //     <Button onClick={handleNext}>
+            //       {activeStep === questions.length - 1 ? "Finish" : "Next"}
+            //     </Button>
+            //   </Box>
+            // </React.Fragment>
 
-        <QuestionFlashCard
-          //   key={questions[activeStep]?._id}
-          question={questions[activeStep]}
-          activeStep={activeStep}
-          handleNext={handleNext}
-          handleBack={handleBack}
-          handleSkip={handleSkip}
-          lastStep={questions.length - 1}
-          isStepOptional={isStepOptional}
-          questionMap={questionMap}
-        />
+            <QuestionFlashCard
+              //   key={questions[activeStep]?._id}
+              question={questions[activeStep]}
+              activeStep={activeStep}
+              handleNext={handleNext}
+              handleBack={handleBack}
+              handleSkip={handleSkip}
+              lastStep={questions.length - 1}
+              isStepOptional={isStepOptional}
+              questionMap={questionMap}
+            />
+          )}
+        </>
       )}
     </Box>
   );

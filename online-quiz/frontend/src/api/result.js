@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const createResultAPI = async (payload) => {
   try {
-    const response = await axios.post(VITE_API_URL + "/api/results");
+    const response = await axios.post(VITE_API_URL + "/api/results", payload);
     return response.data;
   } catch (error) {
     throw error;
