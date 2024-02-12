@@ -165,7 +165,9 @@ export default function ExamPage() {
               }
               return (
                 <Step key={index} {...stepProps}>
-                  <StepLabel {...labelProps}>{question?.statement}</StepLabel>
+                  <StepLabel {...labelProps}>{`Question - ${
+                    index + 1
+                  }`}</StepLabel>
                 </Step>
               );
             })}
