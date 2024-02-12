@@ -45,6 +45,12 @@ export default function HomePage() {
     username: "",
   });
 
+  const isEmailValid = (email) => {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log(user);
@@ -109,6 +115,10 @@ export default function HomePage() {
             autoFocus
             value={user?.email}
             onChange={handleChange}
+            error={!isEmailValid(user.email)}
+            helperText={
+              !isEmailValid(user.email) ? "Invalid email address" : ""
+            }
           />
           <TextField
             margin="normal"
@@ -122,30 +132,15 @@ export default function HomePage() {
             value={user?.username}
             onChange={handleChange}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={!user.email || !user.username}
           >
             Start test
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
