@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 
 function Timer({ seconds, setSeconds }) {
+  const [timerColor, setTimerColor] = useState("");
+
+  const updateTimerColor = (seconds) => {
+    // Calculate the color based on the remaining seconds
+    const red = Math.floor(((300 - seconds) * 255) / 300);
+    const green = Math.floor((seconds * 255) / 300);
+    const color = `rgba(${red}, ${green}, 0, 1)`; // Red to green gradient
+    setTimerColor(color);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
+        updateTimerColor(seconds - 1);
       } else {
         clearInterval(interval);
         // call api with data collected
@@ -26,11 +40,49 @@ function Timer({ seconds, setSeconds }) {
   };
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Timer: {formatTime(seconds)}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        width: "100%",
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{
+          marginBottom: "0px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          alignContent: "center",
+        }}
+      >
+        <AccessTimeIcon
+          sx={{
+            fontSize: "1.5rem",
+            color: `${timerColor}`,
+          }}
+        />
       </Typography>
-    </div>
+      <Divider />
+      <Typography
+        variant="h6"
+        sx={{
+          marginBottom: "0px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          alignContent: "center",
+        }}
+      >
+        {formatTime(seconds)}
+      </Typography>
+    </Box>
   );
 }
 
