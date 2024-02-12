@@ -37,6 +37,7 @@ function Copyright(props) {
 export default function HomePage() {
   const setUserStore = useQuizStore((state) => state.setUser);
   const userStore = useQuizStore((state) => state.user);
+  const setCurrResult = useQuizStore((state) => state.setCurrResult);
   const navigate = useNavigate();
 
   const [user, setUser] = React.useState({
@@ -50,7 +51,7 @@ export default function HomePage() {
     // call api
     try {
       const response = await createUserAPI(user);
-      console.log(response);
+      // console.log(response);
       setUserStore({
         ...userStore,
         email: response?.email,
@@ -58,6 +59,7 @@ export default function HomePage() {
         userId: response?._id,
       });
       showSuccessToast("Credentials saved successfully for exam!");
+      setCurrResult(null);
       setTimeout(() => {
         navigate("/exam");
       }, 2000);
