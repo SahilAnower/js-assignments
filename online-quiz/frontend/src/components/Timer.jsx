@@ -15,21 +15,18 @@ function Timer({ seconds, setSeconds }) {
     setTimerColor(color);
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (seconds > 0) {
-  //       setSeconds(seconds - 1);
-  //       updateTimerColor(seconds - 1);
-  //     } else {
-  //       clearInterval(interval);
-  //       // call api with data collected
-  //       // redirect to results page
-  //     }
-  //   }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+        updateTimerColor(seconds - 1);
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
 
-  //   // Clean up interval on component unmount
-  //   return () => clearInterval(interval);
-  // }, [seconds]);
+    return () => clearInterval(interval);
+  }, [seconds]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -70,7 +67,6 @@ function Timer({ seconds, setSeconds }) {
           }}
         />
       </Typography>
-      {/* <Divider /> */}
       <Typography
         variant="h6"
         sx={{
