@@ -155,16 +155,22 @@ export default function ExamPage() {
             {questions.map((question, index) => {
               const stepProps = {};
               const labelProps = {};
-              if (isStepOptional(index)) {
-                labelProps.optional = (
-                  <Typography variant="caption">Optional</Typography>
-                );
-              }
+              // if (isStepOptional(index)) {
+              //   labelProps.optional = (
+              //     <Typography variant="caption">Optional</Typography>
+              //   );
+              // }
               if (isStepSkipped(index)) {
                 stepProps.completed = false;
               }
               return (
-                <Step key={index} {...stepProps}>
+                <Step
+                  key={index}
+                  {...stepProps}
+                  sx={{
+                    marginBottom: "1rem",
+                  }}
+                >
                   <StepLabel {...labelProps}>{`Question - ${
                     index + 1
                   }`}</StepLabel>

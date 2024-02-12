@@ -15,21 +15,21 @@ function Timer({ seconds, setSeconds }) {
     setTimerColor(color);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-        updateTimerColor(seconds - 1);
-      } else {
-        clearInterval(interval);
-        // call api with data collected
-        // redirect to results page
-      }
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (seconds > 0) {
+  //       setSeconds(seconds - 1);
+  //       updateTimerColor(seconds - 1);
+  //     } else {
+  //       clearInterval(interval);
+  //       // call api with data collected
+  //       // redirect to results page
+  //     }
+  //   }, 1000);
 
-    // Clean up interval on component unmount
-    return () => clearInterval(interval);
-  }, [seconds]);
+  //   // Clean up interval on component unmount
+  //   return () => clearInterval(interval);
+  // }, [seconds]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -48,6 +48,8 @@ function Timer({ seconds, setSeconds }) {
         alignItems: "center",
         alignContent: "center",
         width: "100%",
+        gap: "1rem",
+        marginBottom: "0.5rem",
       }}
     >
       <Typography
@@ -63,12 +65,12 @@ function Timer({ seconds, setSeconds }) {
       >
         <AccessTimeIcon
           sx={{
-            fontSize: "1.5rem",
+            fontSize: "1.6rem",
             color: `${timerColor}`,
           }}
         />
       </Typography>
-      <Divider />
+      {/* <Divider /> */}
       <Typography
         variant="h6"
         sx={{

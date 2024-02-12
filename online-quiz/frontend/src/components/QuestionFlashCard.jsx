@@ -50,10 +50,15 @@ const QuestionFlashCard = ({
   };
 
   return (
-    <Card>
+    <Card
+      sx={{
+        margin: "0.5rem",
+        padding: "1rem",
+      }}
+    >
       <CardContent>
         <FormControl>
-          <FormLabel id="question-label">{question?.statement}</FormLabel>
+          <FormLabel id="question-label">{`Q) ${question?.statement}`}</FormLabel>
           <RadioGroup
             aria-labelledby="question-label"
             defaultValue={""}
@@ -68,26 +73,36 @@ const QuestionFlashCard = ({
                 display: "none",
               }}
             />
-            <FormControlLabel
-              value={question?.answers[0]?.option}
-              control={<Radio />}
-              label={question?.answers[0]?.content}
-            />
-            <FormControlLabel
-              value={question?.answers[1]?.option}
-              control={<Radio />}
-              label={question?.answers[1]?.content}
-            />
-            <FormControlLabel
-              value={question?.answers[2]?.option}
-              control={<Radio />}
-              label={question?.answers[2]?.content}
-            />
-            <FormControlLabel
-              value={question?.answers[3]?.option}
-              control={<Radio />}
-              label={question?.answers[3]?.content}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+                mt: "0.5rem",
+                ml: "1.5rem",
+              }}
+            >
+              <FormControlLabel
+                value={question?.answers[0]?.option}
+                control={<Radio />}
+                label={question?.answers[0]?.content}
+              />
+              <FormControlLabel
+                value={question?.answers[1]?.option}
+                control={<Radio />}
+                label={question?.answers[1]?.content}
+              />
+              <FormControlLabel
+                value={question?.answers[2]?.option}
+                control={<Radio />}
+                label={question?.answers[2]?.content}
+              />
+              <FormControlLabel
+                value={question?.answers[3]?.option}
+                control={<Radio />}
+                label={question?.answers[3]?.content}
+              />
+            </Box>
           </RadioGroup>
         </FormControl>
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
