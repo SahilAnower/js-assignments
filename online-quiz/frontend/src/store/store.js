@@ -7,13 +7,11 @@ export const useQuizStore = create(
       return {
         seconds: 5 * 60,
         user: {},
-        // ownResultId: null,
         questions: null,
         currResult: null,
         questionMap: {},
         setSeconds: (seconds) => set({ seconds }),
         setUser: (user) => set({ user }),
-        // setOwnResultId: (ownResultId) => set({ ownResultId }),
         setQuestions: (questions) => set({ questions }),
         setCurrResult: (currResult) => set({ currResult }),
         setQuestionMap: (questionMap) => set({ questionMap }),

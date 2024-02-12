@@ -28,9 +28,10 @@ export default function ExamPage() {
     setUser,
   } = useQuizStore((state) => state);
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     // check questions exist in global state, if exist render them only
-    // console.log(questions);
     if (questions) {
       console.log("here inside null check");
       return;
@@ -47,12 +48,6 @@ export default function ExamPage() {
     // set questions in global state
     getQuestions();
   }, []);
-
-  // questionMap.clear();
-
-  const navigate = useNavigate();
-
-  // const [seconds, setSeconds] = React.useState(5 * 60);
 
   const setSecondsRef = React.useRef();
   setSecondsRef.current = setSeconds;
@@ -86,7 +81,6 @@ export default function ExamPage() {
   const handleSubmit = async () => {
     // call results api to post a new result
     const answers = [];
-    // console.log(questionMap);
     for (let property in questionMap) {
       answers.push({
         id: property,
@@ -97,7 +91,6 @@ export default function ExamPage() {
       userId: user?.userId,
       answers: answers,
     };
-    // console.log(payload);
     try {
       const response = await createResultAPI(payload);
       setCurrResult(response);
@@ -120,12 +113,6 @@ export default function ExamPage() {
   }, [activeStep, seconds]);
 
   const handleSkip = () => {
-    // if (!isStepOptional(activeStep)) {
-    //   // You probably want to guard against something like this,
-    //   // it should never occur unless someone's actively trying to break something.
-    //   throw new Error("You can't skip a step that isn't optional.");
-    // }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
@@ -138,34 +125,36 @@ export default function ExamPage() {
     setActiveStep(0);
   };
 
-  // const TimerComponent = React.useCallback(
-  //   () => <Timer seconds={seconds} setSeconds={setSecondsRef} />,
-  //   []
-  // );
-
   return (
     <Box sx={{ width: "100%" }}>
       {questions && (
         <>
           <Box>
-            {/* <TimerComponent /> */}
             <Timer seconds={seconds} setSeconds={setSeconds} />
           </Box>
           <Stepper activeStep={activeStep}>
             {questions.map((question, index) => {
               const stepProps = {};
               const labelProps = {};
-              if (isStepOptional(index)) {
-                labelProps.optional = (
-                  <Typography variant="caption">Optional</Typography>
-                );
-              }
+              // if (isStepOptional(index)) {
+              //   labelProps.optional = (
+              //     <Typography variant="caption">Optional</Typography>
+              //   );
+              // }
               if (isStepSkipped(index)) {
                 stepProps.completed = false;
               }
               return (
-                <Step key={index} {...stepProps}>
-                  <StepLabel {...labelProps}>{question?.statement}</StepLabel>
+                <Step
+                  key={index}
+                  {...stepProps}
+                  sx={{
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <StepLabel {...labelProps}>{`Question - ${
+                    index + 1
+                  }`}</StepLabel>
                 </Step>
               );
             })}
