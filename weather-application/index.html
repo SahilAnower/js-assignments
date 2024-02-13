@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather-Application</title>
+    <script src="https://kit.fontawesome.com/67a77e5b1c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -11,11 +12,70 @@
         <h1>Weather ☁️ App</h1>
         <input type="text" id="locationInput" placeholder="Enter a city">
         <button id="searchButton" class="glow-on-hover">🔍 Search</button>
-        <div class="weather-info">
-            <div class="extra-property hidden">
+        <div class="weather-info hidden" id="main-search-result-container">
+                <div class="weather-info__weather-description">
+                    <div class="weather-info__weather-description-wrapper" id="weather-description-image"></div> <!-- background image of the weather description -->
+                    <div class="weather-info__weather-description-text">
+                        <div>
+                            <h3 class="weather-description__current-date" id="timestamp">15 Jan 2019</h3>
+                            <p><span class="weather-description__location-icon"><i class="fa-solid fa-location-dot"></i></span> <span id="location">Kolkata</span></p>
+                        </div>
+                        <div>
+                            <h1 id="temperature">29°C</h1>
+                            <p id="description">Haze</p>
+                        </div>
+                    </div>
+                </div>
+            <div class="weather-info__weather-metadata">
+                <div class="weather-info__weather-attributes">
+                    <div class="weather-attributes__single">
+                        <p class="weather-attribute__single-header">FEELS LIKE</p>
+                        <p class="weather-attribute__single-value"  id="feels-like-temperature">17°C</p>
+                    </div>
+                    <div class="weather-attributes__single">
+                        <p class="weather-attribute__single-header">MIN/MAX</p>
+                        <p class="weather-attribute__single-value"><span class="min-temp-right"  id="min-temperature">16°C</span><span class="min-temp-left"  id="max-temperature">19°C</span></p>
+                    </div>
+                    <div class="weather-attributes__single">
+                        <p class="weather-attribute__single-header">PRESSURE</p>
+                        <p class="weather-attribute__single-value" id="pressure">1019mb</p>
+                    </div>
+                    <div class="weather-attributes__single">
+                        <p class="weather-attribute__single-header">VISIBILITY</p>
+                        <p class="weather-attribute__single-value" id="visibility">3.5km</p>
+                    </div>
+                </div>
+                <div class="weather-info__weather-forecast" id="weather-info__weather-forecast">
+                    <!-- <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div>
+                    <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div>
+                    <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div>
+                    <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div>
+                    <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div> -->
+                </div>
+            </div>
+            <!-- <div class="extra-property hidden">
                 <h2 id="location">Kolkata</h2>
                 <p id="temperature">17°C</p>
                 <p id="description">Haze</p>
+            </div>
+            <div class="extra-property hidden">
+                <p>Date</p>
+                <p id="timestamp">15 Jan 2019</p>
             </div>
             <div class="extra-property hidden">
                 <p>Feels like</p>
@@ -37,14 +97,14 @@
                 <p>Visibility</p>
                 <p id="visibility">3.5km</p>
             </div>
-        </div>
-        <div class="forecast-container">
+        </div> -->
+        <!-- <div class="forecast-container">
             <div class="forecast-header hidden">
                 <h2>5-day forecast</h2>
             </div>
             <div id="forecast-append-container">
             </div>
-        </div>
+        </div> -->
     </div>
     <script src="index.js"></script>
 </body>

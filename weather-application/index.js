@@ -17,11 +17,20 @@ const minTemperatureElement = document.getElementById("min-temperature");
 const maxTemperatureElement = document.getElementById("max-temperature");
 const pressureElement = document.getElementById("pressure");
 const visibilityElement = document.getElementById("visibility");
-const forecastContainer = document.getElementById("forecast-append-container");
+const timeStampElement = document.getElementById("timestamp");
+const forecastContainer = document.getElementById(
+  "weather-info__weather-forecast"
+);
+const weatherDescriptionElement = document.getElementById(
+  "weather-description-image"
+);
 
 searchButton.addEventListener("click", () => {
   const location = locationInput.value.trim();
   if (location) {
+    document
+      .getElementById("main-search-result-container")
+      .classList.remove("hidden");
     fetchWeather(location);
     getFiveDaysWeatherForecast(location);
   }
@@ -31,6 +40,9 @@ locationInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     const location = locationInput.value.trim();
     if (location) {
+      document
+        .getElementById("main-search-result-container")
+        .classList.remove("hidden");
       fetchWeather(location);
       getFiveDaysWeatherForecast(location);
     }
@@ -67,11 +79,17 @@ async function fetchWeather(location) {
     );
     const pressure = data?.main?.pressure; // in mb
     const visibility = Number(data?.visibility) / 1000.0;
-    // const longitude = data?.coord?.lon; // use for forecast
-    // const latitude = data?.coord?.lat; // use for forecast
-    document.querySelectorAll(".extra-property").forEach((div) => {
-      div.classList.remove("hidden");
-    });
+    const timestamp = new Date(Number(data?.dt) * 1000).toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }
+    );
+    // document.querySelectorAll(".extra-property").forEach((div) => {
+    //   div.classList.remove("hidden");
+    // });
     locationElement.textContent = locationName;
     temperatureElement.textContent = `${currentTemperatureInCelsius}°C`;
     descriptionElement.textContent = weatherDescription;
@@ -80,18 +98,24 @@ async function fetchWeather(location) {
     maxTemperatureElement.textContent = `${maxTemperatureInCelsius}°C`;
     pressureElement.textContent = `${pressure} mb`;
     visibilityElement.textContent = `${visibility} km`;
-    await updateWeatherImage(location);
+    timeStampElement.textContent = `${timestamp}`;
+    await updateWeatherImage(location, weatherDescription);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function updateWeatherImage(weather) {
-  const url = `${unsplashWeatherImageUrl}${weather}`;
+async function updateWeatherImage(location, weatherDescription) {
+  const url = `${unsplashWeatherImageUrl}${location}`;
   document.body.style.backgroundImage = `url(${url})`;
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundPosition = "center";
   document.body.style.backgroundRepeat = "no-repeat";
+  const url2 = `${unsplashWeatherImageUrl}${weatherDescription}`;
+  weatherDescriptionElement.style.backgroundImage = `url(${url2})`;
+  weatherDescriptionElement.style.backgroundSize = "cover";
+  weatherDescriptionElement.style.backgroundPosition = "center";
+  weatherDescriptionElement.style.backgroundRepeat = "no-repeat";
 }
 
 async function getFiveDaysWeatherForecast(location) {
@@ -112,17 +136,32 @@ async function getFiveDaysWeatherForecast(location) {
     const total = data?.cnt;
     const eachDaySize = total / 5;
     for (let i = 0; i < total; i += eachDaySize) {
-      let sumTemp = 0;
-      let avgTemp = 0;
+      let sumHighTemp = 0;
+      let sumLowTemp = 0;
+      let avgHighTemp = 0;
+      let avgLowTemp = 0;
       let date = data?.list[i]?.dt_txt.split(" ")[0];
       for (let j = i; j < i + eachDaySize; j++) {
-        sumTemp += Number(data?.list[i]?.main?.temp);
+        sumHighTemp += Number(data?.list[i]?.main?.temp_max);
+        sumLowTemp += Number(data?.list[i]?.main?.temp_min);
       }
-      avgTemp = kelvinToCelsius(sumTemp / eachDaySize);
+      // console.log(sumHighTemp);
+      // console.log(sumLowTemp);
+      avgHighTemp = kelvinToCelsius(sumHighTemp / eachDaySize);
+      avgLowTemp = kelvinToCelsius(sumLowTemp / eachDaySize);
       const newDiv = document.createElement("div");
+      // newDiv.innerHTML = `
+      //   <p>${avgLowTemp}°C | ${avgHighTemp}°C</p>
+      //   <p>${date}</p>
+      // `;
+      // <div class="weather-forecast__card">
+      //   <p>2022-08-30</p>
+      //   <p>18°C | 25°C</p>
+      // </div>;
+      newDiv.classList.add("weather-forecast__card");
       newDiv.innerHTML = `
-        <p>${avgTemp} °C</p>
         <p>${date}</p>
+        <p>${avgLowTemp}°C | ${avgHighTemp}°C</p>
       `;
       forecastContainer.appendChild(newDiv);
     }
