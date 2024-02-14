@@ -28,6 +28,11 @@ searchButton.addEventListener("click", async () => {
   showLoading();
   const location = locationInput.value.trim();
   if (location && location !== lastInputValue) {
+    if (lastInputValue !== null) {
+      document
+        .getElementById("main-search-result-container")
+        .classList.add("hidden");
+    }
     await fetchWeather(location);
     await getFiveDaysWeatherForecast(location);
     document
@@ -43,6 +48,11 @@ locationInput.addEventListener("keydown", async (event) => {
     showLoading();
     const location = locationInput.value.trim();
     if (location && location !== lastInputValue) {
+      if (lastInputValue !== null) {
+        document
+          .getElementById("main-search-result-container")
+          .classList.add("hidden");
+      }
       await fetchWeather(location);
       await getFiveDaysWeatherForecast(location);
       document
