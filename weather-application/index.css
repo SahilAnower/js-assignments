@@ -186,6 +186,23 @@ h1 {
     font-size: 3rem;
 }
 
+.temperature {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.tempSwitch {
+    font-size: 1.5rem;
+    color: #FFD0EC;
+    cursor: pointer;
+}
+
+.temp-scale-active {
+    color: #FFD0EC !important;
+}
+
 input[type="text"] {
     width: 90%;
     padding: 10px;

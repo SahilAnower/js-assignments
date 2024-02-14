@@ -20,6 +20,85 @@ const forecastContainer = document.getElementById(
 const weatherDescriptionElement = document.getElementById(
   "weather-description-image"
 );
+const switchElement = document.getElementById("switch-temp");
+const fahrenheitScaleElement = document.getElementById("fahrenheit-scale");
+const celsiusScaleElement = document.getElementById("celsius-scale");
+
+switchElement.addEventListener("click", () => {
+  const forecastCard = Array.from(
+    document.querySelectorAll(".weather-forecast__card")
+  );
+  // for (const forecast of forecastCard) {
+  //   console.log(forecast.querySelector("p:nth-of-type(2)"));
+  // }
+  // console.log(forecastCard, temperatureParagraph);
+  if (fahrenheitScaleElement.classList.contains("temp-scale-active")) {
+    fahrenheitScaleElement.classList.remove("temp-scale-active");
+    celsiusScaleElement.classList.add("temp-scale-active");
+    // convert all temperatures to celsius
+    for (const forecast of forecastCard) {
+      const temperatureParagraph = forecast.querySelector("p:nth-of-type(2)");
+      const temperature = temperatureParagraph.textContent;
+      // console.log(temperature);
+      let tempMin = convertFahrenheitToCelsius(
+        +temperature.split("|")[0].split("°")[0]
+      );
+      let tempMax = convertFahrenheitToCelsius(
+        +temperature.split("|")[1].split("°")[0]
+      );
+      // console.log(tempMin, tempMax);
+      temperatureParagraph.textContent = `${tempMin}°C | ${tempMax}°C`;
+    }
+    temperatureElement.textContent = convertFahrenheitToCelsius(
+      +temperatureElement.textContent
+    );
+    feelsLikeTemperature.textContent =
+      convertFahrenheitToCelsius(
+        +feelsLikeTemperature.textContent.split("°")[0]
+      ) + "°C";
+    minTemperatureElement.textContent =
+      convertFahrenheitToCelsius(
+        +minTemperatureElement.textContent.split("°")[0]
+      ) + "°C";
+    maxTemperatureElement.textContent =
+      convertFahrenheitToCelsius(
+        +maxTemperatureElement.textContent.split("°")[0]
+      ) + "°C";
+  } else {
+    fahrenheitScaleElement.classList.add("temp-scale-active");
+    celsiusScaleElement.classList.remove("temp-scale-active");
+    // convert all temperatures to fahrenheits
+    for (const forecast of forecastCard) {
+      const temperatureParagraph = forecast.querySelector("p:nth-of-type(2)");
+      const temperature = temperatureParagraph.textContent;
+      // console.log(temperature);
+      let tempMin = convertCelsiusToFahrenheit(
+        +temperature.split("|")[0].split("°")[0]
+      );
+      let tempMax = convertCelsiusToFahrenheit(
+        +temperature.split("|")[1].split("°")[0]
+      );
+      // console.log(tempMin, tempMax);
+      temperatureParagraph.textContent = `${tempMin}°F | ${tempMax}°F`;
+    }
+    temperatureElement.textContent = convertCelsiusToFahrenheit(
+      +temperatureElement.textContent
+    );
+    feelsLikeTemperature.textContent =
+      convertCelsiusToFahrenheit(
+        +feelsLikeTemperature.textContent.split("°")[0]
+      ) + "°F";
+    minTemperatureElement.textContent =
+      convertCelsiusToFahrenheit(
+        +minTemperatureElement.textContent.split("°")[0]
+      ) + "°F";
+    maxTemperatureElement.textContent =
+      convertCelsiusToFahrenheit(
+        +maxTemperatureElement.textContent.split("°")[0]
+      ) + "°F";
+  }
+});
+
 const loadingElement = document.getElementById("loading");
 
 let lastInputValue = null;
@@ -35,6 +114,10 @@ searchButton.addEventListener("click", async () => {
     }
     await fetchWeather(location);
     await getFiveDaysWeatherForecast(location);
+    if (fahrenheitScaleElement.classList.contains("temp-scale-active")) {
+      fahrenheitScaleElement.classList.remove("temp-scale-active");
+      celsiusScaleElement.classList.add("temp-scale-active");
+    }
     document
       .getElementById("main-search-result-container")
       .classList.remove("hidden");
@@ -55,6 +138,10 @@ locationInput.addEventListener("keydown", async (event) => {
       }
       await fetchWeather(location);
       await getFiveDaysWeatherForecast(location);
+      if (fahrenheitScaleElement.classList.contains("temp-scale-active")) {
+        fahrenheitScaleElement.classList.remove("temp-scale-active");
+        celsiusScaleElement.classList.add("temp-scale-active");
+      }
       document
         .getElementById("main-search-result-container")
         .classList.remove("hidden");
@@ -113,7 +200,7 @@ async function fetchWeather(location) {
       }
     );
     locationElement.textContent = locationName;
-    temperatureElement.textContent = `${currentTemperatureInCelsius}°C`;
+    temperatureElement.textContent = `${currentTemperatureInCelsius}`;
     descriptionElement.textContent = weatherDescription;
     feelsLikeTemperature.textContent = `${feelsLikeTemperatureInCelsius}°C`;
     minTemperatureElement.textContent = `${minTemperatureInCelsius}°C`;
@@ -125,6 +212,14 @@ async function fetchWeather(location) {
   } catch (error) {
     console.error(error);
   }
+}
+
+function convertCelsiusToFahrenheit(temp) {
+  return Math.round((temp * 9) / 5 + 32);
+}
+
+function convertFahrenheitToCelsius(temp) {
+  return Math.round(((temp - 32) * 5) / 9);
 }
 
 async function updateWeatherImage(location, weatherDescription) {

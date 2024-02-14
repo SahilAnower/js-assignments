@@ -83,7 +83,7 @@
                 FETCHING WEATHER...
             </div>
         </div>
-        <div class="weather-info hidden" id="main-search-result-container">
+        <div class="weather-info" id="main-search-result-container">
                 <div class="weather-info__weather-description">
                     <div class="weather-info__weather-description-wrapper" id="weather-description-image"></div> <!-- background image of the weather description -->
                     <div class="weather-info__weather-description-text">
@@ -92,7 +92,7 @@
                             <p><span class="weather-description__location-icon"><i class="fa-solid fa-location-dot"></i></span> <span id="location">Kolkata</span></p>
                         </div>
                         <div>
-                            <h1 id="temperature">29°C</h1>
+                            <h1 class="temperature"><span id="temperature">29</span><span id="celsius-scale" class="temp-scale-active">°C</span><i id="switch-temp" class="fa-solid fa-arrows-left-right tempSwitch"></i><span id="fahrenheit-scale">°F</span></h1>
                             <p id="description">Haze</p>
                         </div>
                     </div>
@@ -117,10 +117,14 @@
                     </div>
                 </div>
                 <div class="weather-info__weather-forecast" id="weather-info__weather-forecast">
-                    <!-- <div class="weather-forecast__card">
+                    <div class="weather-forecast__card">
                         <p>2022-08-30</p>
                         <p>18°C | 25°C</p>
-                    </div> -->
+                    </div>
+                    <div class="weather-forecast__card">
+                        <p>2022-08-30</p>
+                        <p>18°C | 25°C</p>
+                    </div>
                 </div>
             </div>
     </div>
